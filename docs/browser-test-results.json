@@ -1,0 +1,124 @@
+{
+  "environment": "offline DOM injection (opaque origin)",
+  "capabilities": {
+    "renderer": "Canvas 2D",
+    "secureContext": false,
+    "webgpuAvailable": false,
+    "persistentStorage": false
+  },
+  "browser": "144.0.7559.96",
+  "checks": [
+    {
+      "name": "Workspace boot: fourteen real files",
+      "passed": true
+    },
+    {
+      "name": "Initial worker diagnostics and C# symbols",
+      "passed": true
+    },
+    {
+      "name": "JavaScript / JSON validation succeeds",
+      "passed": true
+    },
+    {
+      "name": "Native beforeinput edits the piece table",
+      "passed": true
+    },
+    {
+      "name": "Keyboard undo",
+      "passed": true
+    },
+    {
+      "name": "Keyboard redo",
+      "passed": true
+    },
+    {
+      "name": "Replace all updates source transactionally",
+      "passed": true
+    },
+    {
+      "name": "Replace-all undo is one operation",
+      "passed": true
+    },
+    {
+      "name": "Auto-pair insertion",
+      "passed": true
+    },
+    {
+      "name": "Paired backspace",
+      "passed": true
+    },
+    {
+      "name": "Deletion respects extended grapheme clusters",
+      "passed": true
+    },
+    {
+      "name": "Accessible editor writes through document model",
+      "passed": true
+    },
+    {
+      "name": "Completion popup has actual candidates",
+      "passed": true
+    },
+    {
+      "name": "Worker reports malformed JavaScript",
+      "passed": true
+    },
+    {
+      "name": "Diagnostics clear after a valid edit",
+      "passed": true
+    },
+    {
+      "name": "JavaScript runs in isolated worker",
+      "passed": true
+    },
+    {
+      "name": "Quick open selects the matching workspace document",
+      "passed": true
+    },
+    {
+      "name": "Trace pauses at a real source checkpoint",
+      "passed": true
+    },
+    {
+      "name": "Step exposes initialized top-level locals",
+      "passed": true
+    },
+    {
+      "name": "Continue completes the trace worker",
+      "passed": true
+    },
+    {
+      "name": "Seven demo module tests really execute",
+      "passed": true
+    },
+    {
+      "name": "Project ZIP export has valid CRCs and files",
+      "passed": true
+    },
+    {
+      "name": "Portable workspace backup preserves document data",
+      "passed": true
+    },
+    {
+      "name": "Sandboxed preview loads local modules and handles input",
+      "passed": true
+    },
+    {
+      "name": "Preview updates live particle parameters",
+      "passed": true
+    },
+    {
+      "name": "Stop disposes all execution sessions",
+      "passed": true
+    },
+    {
+      "name": "Light theme switches the actual editor palette",
+      "passed": true
+    },
+    {
+      "name": "No uncaught browser exceptions",
+      "passed": true
+    }
+  ]
+}

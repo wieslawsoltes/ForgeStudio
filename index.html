@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#20212b">
+  <meta name="description" content="Forge Studio — a framework-free browser IDE with a WebGPU text engine, real editing, sandboxed execution, and local workspaces.">
+  <title>Forge Studio — Nebula</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%238d73bc'/%3E%3Cpath d='M9 7h16l-3 5h-7v5h6l-3 5h-3v5H9z' fill='white'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+<div id="app">
+  <header class="titlebar">
+    <button class="brand-mark" data-command="about" aria-label="About Forge Studio" data-icon="logo"></button>
+    <nav class="menubar" id="menubar" aria-label="Application menu"></nav>
+    <div class="title-project"><span id="title-project">Nebula</span><span class="title-divider">/</span><span>Forge Studio</span></div>
+    <button class="global-search" data-command="palette"><span data-icon="search"></span><span>Search everything</span><kbd>Ctrl Q</kbd></button>
+    <button class="profile-badge" data-command="about" title="Local workspace. No account required.">FS</button>
+  </header>
+  <div class="toolbar" role="toolbar" aria-label="Main toolbar">
+    <div class="tool-group"><button class="icon-button" data-command="previousFile" data-icon="arrowLeft" title="Previous file"></button><button class="icon-button" data-command="nextFile" data-icon="arrowRight" title="Next file"></button></div>
+    <div class="tool-group"><button class="icon-button" data-command="openFolder" data-icon="folderOpen" title="Open a local folder"></button><button class="icon-button" data-command="save" data-icon="save" title="Save (Ctrl+S)"></button><button class="icon-button" data-command="saveAll" data-icon="saveAll" title="Save all (Ctrl+Shift+S)"></button></div>
+    <div class="tool-group"><button class="icon-button" data-command="undo" data-icon="undo" title="Undo (Ctrl+Z)"></button><button class="icon-button" data-command="redo" data-icon="redo" title="Redo (Ctrl+Y)"></button></div>
+    <div class="tool-group configuration"><select id="run-mode" aria-label="Execution mode"><option value="web">Web preview</option><option value="script">JavaScript</option><option value="trace">Trace script</option></select><span class="platform-label">Browser</span></div>
+    <div class="tool-group run-tools"><button class="run-button" data-command="start" title="Start (F5)"><span data-icon="play"></span><span id="startup-project">Nebula.Web</span></button><button class="icon-button stop-button" data-command="stop" data-icon="stop" title="Stop execution (Shift+F5)" disabled></button><button class="icon-button hot-reload" data-command="refreshPreview" data-icon="bolt" title="Refresh preview"></button></div>
+    <div class="tool-group trace-tools hidden" id="trace-tools"><button class="icon-button" data-command="continue" data-icon="play" title="Continue (F8)"></button><button class="icon-button" data-command="step" data-icon="step" title="Step statement (F10)"></button><span id="trace-state">Trace</span></div>
+    <div class="toolbar-spacer"></div>
+    <button class="toolbar-text" data-command="togglePreview" title="Toggle split preview"><span data-icon="split"></span>Preview</button>
+    <button class="gpu-indicator" data-command="renderInfo"><span class="gpu-light"></span><span id="renderer-name">Initializing</span><span data-icon="chip"></span></button>
+  </div>
+  <div class="workbench" id="workbench">
+    <aside class="activity-bar" aria-label="Tool windows">
+      <button class="activity active" data-command="explorer" data-icon="files" title="Solution Explorer"></button>
+      <button class="activity" data-command="searchWorkspace" data-icon="search" title="Find in Files (Ctrl+Shift+F)"></button>
+      <button class="activity" data-command="changes" data-icon="branch" title="Local changes"><span class="activity-count hidden" id="changes-badge">0</span></button>
+      <button class="activity" data-command="trace" data-icon="debug" title="Trace current JavaScript"></button>
+      <button class="activity" data-command="tests" data-icon="beaker" title="Test Explorer"></button>
+      <div class="activity-fill"></div>
+      <button class="activity" data-command="shortcuts" data-icon="keyboard" title="Keyboard shortcuts (F1)"></button>
+      <button class="activity" data-command="settings" data-icon="settings" title="Settings"></button>
+    </aside>
+    <main class="main-workspace" id="main-workspace">
+      <div class="document-tabs" id="document-tabs" role="tablist" aria-label="Open files"></div>
+      <div class="breadcrumbs"><div id="breadcrumbs"></div><button class="breadcrumb-symbol" id="symbol-picker" data-command="symbols"><span data-icon="class"></span><span id="current-symbol">ParticleSystem</span><span data-icon="down"></span></button><button class="icon-button" data-command="toggleMinimap" data-icon="layout" title="Toggle minimap"></button></div>
+      <div class="editor-layout" id="editor-layout">
+        <div class="editor-column">
+          <div class="find-bar hidden" id="find-bar">
+            <div class="find-top"><span data-icon="search"></span><input id="find-input" placeholder="Find in current file" aria-label="Find in current file"><button id="find-case" title="Match case">Aa</button><button id="find-word" title="Match whole word">ab</button><span id="find-count">0 results</span><button class="icon-button" data-command="findPrevious" data-icon="arrowLeft" title="Previous match"></button><button class="icon-button" data-command="findNext" data-icon="arrowRight" title="Next match"></button><button class="icon-button" data-command="closeFind" data-icon="close" title="Close find"></button></div>
+            <div class="replace-row" id="replace-row"><input id="replace-input" placeholder="Replace with…" aria-label="Replacement text"><button class="small-button" data-command="replace">Replace</button><button class="small-button" data-command="replaceAll">Replace all</button></div>
+          </div>
+          <div class="editor-host" id="editor" aria-label="Source code editor"></div>
+          <div class="editor-footer"><button data-command="fontSize" id="zoom-label">100%</button><span id="document-support">C# syntax support</span><span class="editor-footer-right"><span class="tiny-dot"></span><span id="file-health">No syntax errors</span></span></div>
+        </div>
+        <section class="preview-panel hidden" id="preview-panel" aria-label="Live preview">
+          <div class="panel-title"><span><span data-icon="play"></span> Live preview <span class="live-pill">LIVE</span></span><div><button class="icon-button" data-command="refreshPreview" data-icon="refresh" title="Reload preview"></button><button class="icon-button" data-command="maximizePreview" data-icon="expand" title="Expand preview"></button><button class="icon-button" data-command="togglePreview" data-icon="close" title="Close preview"></button></div></div>
+          <div class="preview-address"><span data-icon="cube"></span><span id="preview-address">workspace / index.html</span><span class="sandbox-tag">SANDBOX</span></div>
+          <iframe id="preview-frame" title="Sandboxed project preview" sandbox="allow-scripts"></iframe>
+          <div class="preview-empty" id="preview-empty"><div class="empty-symbol" data-icon="play"></div><h3>Bring your code to life.</h3><p>Run your web project in an isolated browser preview.</p><button class="primary-button" data-command="runPreview">Run project <kbd>F5</kbd></button></div>
+        </section>
+      </div>
+      <div class="horizontal-resizer" id="panel-resizer" role="separator" aria-label="Resize output panel" aria-orientation="horizontal" tabindex="0"></div>
+      <section class="bottom-panel" id="bottom-panel" aria-label="Development tools">
+        <header class="bottom-header"><nav id="bottom-tabs" aria-label="Output panels"><button class="panel-tab active" data-panel="output">Output</button><button class="panel-tab" data-panel="problems">Error List <span class="count-pill" id="problem-count">0</span></button><button class="panel-tab" data-panel="terminal">Terminal</button><button class="panel-tab" data-panel="tests">Test Explorer</button><button class="panel-tab" data-panel="changes">Local Changes <span class="count-pill" id="change-count">0</span></button><button class="panel-tab" data-panel="debug">Locals</button></nav><div><button class="icon-button" data-command="clearOutput" data-icon="trash" title="Clear active panel"></button><button class="icon-button" data-command="togglePanel" data-icon="close" title="Hide panel"></button></div></header>
+        <div id="output-panel" class="panel-content output-panel"><div class="output-toolbar"><span>Show output from:</span><select id="output-filter" aria-label="Output channel"><option value="all">Forge Studio</option><option value="build">Validation</option><option value="console">Application</option></select><span class="output-channel">LOCAL WORKSPACE</span></div><div class="log-lines" id="output-lines" role="log" aria-live="polite"></div></div>
+        <div id="problems-panel" class="panel-content hidden"><div class="problems-summary" id="problems-summary"></div><div class="problems-table" id="problems-list"></div></div>
+        <div id="terminal-panel" class="panel-content terminal-panel hidden"><div class="terminal-notice"><span data-icon="terminal"></span> Workspace terminal <span>Virtual filesystem · isolated JavaScript evaluator · not an OS shell</span></div><div class="terminal-lines" id="terminal-lines" role="log"></div><form id="terminal-form" class="terminal-prompt"><span>forge</span><span class="terminal-path">~/workspace</span><span>❯</span><input id="terminal-input" autocomplete="off" spellcheck="false" aria-label="Workspace terminal command" placeholder="Type help to get started"></form></div>
+        <div id="tests-panel" class="panel-content hidden"><div class="tests-toolbar"><button class="small-button" data-command="runTests"><span data-icon="play"></span>Run all tests</button><span id="test-summary">Discover and run *.test.js files</span></div><div id="test-results" class="test-results"></div></div>
+        <div id="changes-panel" class="panel-content hidden"><div class="changes-toolbar"><span>Compared with local baseline — not connected to Git</span><button class="small-button" data-command="snapshot">Set baseline</button><button class="small-button" data-command="exportZip">Export ZIP</button></div><div id="changes-list"></div></div>
+        <div id="debug-panel" class="panel-content hidden"><div class="debug-notice">JavaScript trace debugger · pauses at top-level statements · F10 step · F8 continue</div><div id="locals-list"><div class="panel-empty">Trace <strong>scripts/diagnostics.js</strong> to inspect live variables.</div></div></div>
+      </section>
+    </main>
+    <div class="vertical-resizer" id="explorer-resizer" role="separator" aria-label="Resize Solution Explorer" aria-orientation="vertical" tabindex="0"></div>
+    <aside class="right-sidebar" id="right-sidebar">
+      <section class="explorer-section" id="explorer-section">
+        <div class="panel-title"><span id="sidebar-title">Solution Explorer</span><div><button class="icon-button" data-command="collapseTree" data-icon="collapse" title="Collapse folders"></button><button class="icon-button" data-command="newFile" data-icon="plus" title="New file"></button><button class="icon-button" data-command="toggleExplorer" data-icon="close" title="Hide Solution Explorer"></button></div></div>
+        <div class="explorer-toolbar"><button class="icon-button" data-command="openFolder" data-icon="folderOpen" title="Open folder"></button><button class="icon-button" data-command="revealActive" data-icon="files" title="Reveal active file"></button><button class="icon-button" data-command="refreshTree" data-icon="refresh" title="Refresh tree"></button><span id="file-count">14 files</span></div>
+        <div class="explorer-search"><span data-icon="search"></span><input id="tree-search" placeholder="Search Solution Explorer" aria-label="Search solution files"><kbd>Ctrl ;</kbd></div>
+        <div id="file-tree" class="file-tree" role="tree" aria-label="Solution files"></div>
+        <div id="workspace-search" class="workspace-search hidden"><input id="workspace-query" placeholder="Find in all files…" aria-label="Find text across workspace"><div class="workspace-search-meta" id="workspace-search-meta">Search your entire workspace.</div><div id="workspace-results"></div></div>
+        <div class="explorer-bottom"><button class="active" data-command="explorer">Solution Explorer</button><button data-command="outline">Outline</button></div>
+      </section>
+      <section class="properties-section">
+        <div class="panel-title"><span id="properties-title">Properties</span><div><button class="icon-button" data-command="symbols" data-icon="outline" title="Go to symbol"></button></div></div>
+        <div class="properties-file" id="properties-file"></div>
+        <div class="property-category"><span data-icon="down"></span> File information</div>
+        <dl id="file-properties" class="file-properties"></dl>
+        <div class="workspace-note"><span data-icon="chip"></span><div><strong>Built for your flow.</strong><span>GPU-rendered. Framework-free.</span></div></div>
+      </section>
+    </aside>
+  </div>
+  <footer class="statusbar"><button data-command="togglePanel" class="status-ready"><span data-icon="check"></span><span id="status-message">Ready</span></button><button data-command="changes"><span data-icon="branch"></span><span>Local workspace</span></button><button data-command="problems" class="status-diagnostics"><span data-icon="error"></span><span id="status-errors">0</span><span data-icon="warning"></span><span>0</span></button><div class="status-spacer"></div><span id="render-stats" title="CPU frame preparation time, not GPU execution time"></span><button data-command="gotoLine" id="cursor-status">Ln 1, Col 1</button><button data-command="settings" id="indent-status">Spaces: 4</button><span>UTF-8</span><button data-command="toggleEol" id="eol-status">LF</button><span id="language-status">C#</span><button data-command="notifications" class="notification-status" data-icon="info" title="Workspace storage status"></button></footer>
+</div>
+<div class="menu-popup hidden" id="menu-popup" role="menu"></div>
+<div class="overlay hidden" id="palette-overlay"><div class="command-palette" role="dialog" aria-modal="true" aria-label="Command palette"><div class="palette-search"><span data-icon="search"></span><input id="palette-input" placeholder="Search commands…" autocomplete="off" spellcheck="false" aria-label="Search commands or files"><kbd>esc</kbd></div><div class="palette-label" id="palette-label">COMMANDS</div><div class="palette-results" id="palette-results" role="listbox"></div><div class="palette-footer"><span><kbd>↑</kbd><kbd>↓</kbd> navigate</span><span><kbd>↵</kbd> select</span><span id="palette-hint">Forge Studio</span></div></div></div>
+<div class="modal-overlay hidden" id="modal-overlay"><section class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title"><header><h2 id="modal-title"></h2><button class="icon-button" id="modal-close" data-icon="close" aria-label="Close dialog"></button></header><div id="modal-body"></div><footer id="modal-actions"></footer></section></div>
+<div class="toasts" id="toasts" aria-live="polite"></div>
+<input id="file-picker" type="file" multiple hidden>
+<input id="folder-picker" type="file" webkitdirectory multiple hidden>
+<input id="workspace-picker" type="file" accept=".json,.forge" hidden>
+<script type="module" src="./src/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,128 @@
+
+> forge-studio@1.0.0 test
+> node --test tests/*.test.js
+
+TAP version 13
+# Subtest: piece treap supports empty, insert, replace, delete and compact
+ok 1 - piece treap supports empty, insert, replace, delete and compact
+  ---
+  duration_ms: 1.777201
+  type: 'test'
+  ...
+# Subtest: piece treap matches a reference string across 4,000 randomized UTF-16 edits
+ok 2 - piece treap matches a reference string across 4,000 randomized UTF-16 edits
+  ---
+  duration_ms: 48.613644
+  type: 'test'
+  ...
+# Subtest: large document line lookup remains exact after insertion
+ok 3 - large document line lookup remains exact after insertion
+  ---
+  duration_ms: 22.005069
+  type: 'test'
+  ...
+# Subtest: history coalesces typing and supports undo, redo, divergent edits
+ok 4 - history coalesces typing and supports undo, redo, divergent edits
+  ---
+  duration_ms: 1.245737
+  type: 'test'
+  ...
+# Subtest: buffer rejects invalid ranges
+ok 5 - buffer rejects invalid ranges
+  ---
+  duration_ms: 0.92279
+  type: 'test'
+  ...
+# Subtest: lexer maintains multiline state and resets after comments
+ok 6 - lexer maintains multiline state and resets after comments
+  ---
+  duration_ms: 1.459231
+  type: 'test'
+  ...
+# Subtest: token cache invalidates state from the edited line
+ok 7 - token cache invalidates state from the edited line
+  ---
+  duration_ms: 0.295686
+  type: 'test'
+  ...
+# Subtest: literal search escapes regex operators, honors case and whole word
+ok 8 - literal search escapes regex operators, honors case and whole word
+  ---
+  duration_ms: 0.565333
+  type: 'test'
+  ...
+# Subtest: line diff produces a reversible edit stream
+ok 9 - line diff produces a reversible edit stream
+  ---
+  duration_ms: 0.348533
+  type: 'test'
+  ...
+# Subtest: safe virtual paths normalize and reject workspace escape
+ok 10 - safe virtual paths normalize and reject workspace escape
+  ---
+  duration_ms: 0.544523
+  type: 'test'
+  ...
+# Subtest: workspace preserves modifications, additions, deletions and rename in local diffs
+ok 11 - workspace preserves modifications, additions, deletions and rename in local diffs
+  ---
+  duration_ms: 1.262301
+  type: 'test'
+  ...
+# Subtest: workspace import rejects duplicates and malformed backups before replacing files
+ok 12 - workspace import rejects duplicates and malformed backups before replacing files
+  ---
+  duration_ms: 0.213715
+  type: 'test'
+  ...
+# Subtest: module resolver rewrites AST import sites but leaves ordinary strings intact
+ok 13 - module resolver rewrites AST import sites but leaves ordinary strings intact
+  ---
+  duration_ms: 3.968381
+  type: 'test'
+  ...
+# Subtest: all included JavaScript modules and test dependencies parse and resolve
+ok 14 - all included JavaScript modules and test dependencies parse and resolve
+  ---
+  duration_ms: 15.102396
+  type: 'test'
+  ...
+# Subtest: trace instrumentation snapshots only initialized top-level bindings
+ok 15 - trace instrumentation snapshots only initialized top-level bindings
+  ---
+  duration_ms: 0.724568
+  type: 'test'
+  ...
+# Subtest: ZIP writer produces valid headers and canonical CRC32
+ok 16 - ZIP writer produces valid headers and canonical CRC32
+  ---
+  duration_ms: 2.053838
+  type: 'test'
+  ...
+# Subtest: undo returns to the saved revision without flattening the document
+ok 17 - undo returns to the saved revision without flattening the document
+  ---
+  duration_ms: 0.322165
+  type: 'test'
+  ...
+# Subtest: invalid document edits leave history and source unchanged
+ok 18 - invalid document edits leave history and source unchanged
+  ---
+  duration_ms: 0.126316
+  type: 'test'
+  ...
+# Subtest: saving an earlier in-flight snapshot does not mark later edits saved
+ok 19 - saving an earlier in-flight snapshot does not mark later edits saved
+  ---
+  duration_ms: 0.140877
+  type: 'test'
+  ...
+1..19
+# tests 19
+# suites 0
+# pass 19
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 169.258888
