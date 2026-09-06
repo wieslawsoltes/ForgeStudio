@@ -10,13 +10,13 @@ Source: https://github.com/wieslawsoltes/ForgeStudio
 
 The `Publish Forge Studio` workflow runs on pushes to `main` and can be run manually. It runs the core tests, rebuilds and checks the committed portable HTML, and runs the Chromium integration suite before publishing.
 
-Only the static runtime files are copied to `gh-pages`: `index.html`, `styles.css`, `ForgeStudio.html`, `LICENSE`, `src/`, `vendor/`, `.nojekyll`, and a `deployment.json` recording the source commit. The complete editable source, tests, tools, documentation, and screenshots remain on `main`.
+Only the static runtime files are uploaded to the Pages artifact: `index.html`, `styles.css`, `ForgeStudio.html`, `LICENSE`, `src/`, `vendor/`, `.nojekyll`, and a `deployment.json` recording the source commit. The complete editable source, tests, tools, documentation, and screenshots remain on `main`.
 
-GitHub Pages uses the root of `gh-pages` as its publishing source. The workflow explicitly requests a Pages build with the repository-scoped `GITHUB_TOKEN`, because pushes by that token do not automatically trigger another workflow. No personal access token, paid hosting, or application build dependencies are required.
+The workflow uses the official `actions/configure-pages`, `actions/upload-pages-artifact`, and `actions/deploy-pages` actions. It authenticates with the repository-scoped `GITHUB_TOKEN` and OpenID Connect. Repository contents are read-only during publishing; no personal access token, deployment branch, paid hosting, or application build dependencies are required.
 
 After publication, the workflow checks the deployed source revision and the SHA-256 checksum of every static asset, then runs the Chromium integration suite against the public HTTPS application. Browser reports and screenshots are available as the workflow artifact `forge-browser-verification`.
 
-Keep Settings > Pages > Source set to **Deploy from a branch**, with **gh-pages** and **/(root)** selected. The `Core validation` workflow also checks pull requests without publishing.
+Keep Settings > Pages > Source set to **GitHub Actions**. The `Core validation` workflow also checks pull requests without publishing.
 
 ## Local development
 
@@ -37,6 +37,4 @@ FORGE_URL=https://wieslawsoltes.github.io/ForgeStudio/ python3 tests/browser_e2e
 
 `docs/SOURCE-INTEGRITY.json` records the checksums of the initial delivered source. It is provenance for the initial import, not a restriction on subsequent source changes.
 
-GitHub's publishing-source documentation: https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site
-
-GitHub's Pages build API: https://docs.github.com/en/rest/pages/pages#request-a-github-pages-build
+GitHub's custom workflow documentation: https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages
