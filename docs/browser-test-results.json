@@ -6,7 +6,7 @@
     "webgpuAvailable": false,
     "persistentStorage": false
   },
-  "browser": "144.0.7559.96",
+  "browser": "151.0.7922.34",
   "checks": [
     {
       "name": "Workspace boot: fourteen real files",
